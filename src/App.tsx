@@ -1,8 +1,9 @@
-import Button from './components/Button'
+import {Button} from './components/Button'
+
 function App() {
   return( 
   <div>
-  <button>Ola</button>
+  <Button/>
   </div>
     );
 }
