@@ -6,9 +6,11 @@ import logoImg from '../assets/images/logo.svg'
 import googleIconImg from '../assets/images/google-icon.svg'
 import '../styles/auth.scss'
 import { Button } from '../components/Button'
+import { useAuth } from '../hooks/useAuth'
 
 //importei a imagem que foi colocada dentro do vscode atraves desse codigo para que ela pudesse ser usada no src da tag img , e o nome q esta entre chaves é o nome que eu dei ao import.
 export function NewRoom() {
+    const { user } = useAuth();
 
     return (
         <div id="page-auth">
@@ -21,6 +23,7 @@ export function NewRoom() {
 
                 <div className="main-content">
                     <img className='logo-letmeask' src={logoImg} alt="Logo letmeask" />
+                    <h1>{user?.name}</h1>
                     <h2>Criar uma nova sala</h2>
                     <form>
                         <input
