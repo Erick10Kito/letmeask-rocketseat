@@ -1,5 +1,5 @@
 
-import { auth, firebase } from '../services/firebase'
+import { auth, database, firebase } from '../services/firebase'
 import { useNavigate } from 'react-router-dom'
 import illustrationImg from '../assets/images/illustration.svg'
 import logoImg from '../assets/images/logo.svg'
@@ -7,12 +7,14 @@ import googleIconImg from '../assets/images/google-icon.svg'
 import '../styles/auth.scss'
 import { Button } from '../components/Button'
 import { useAuth } from '../hooks/useAuth'
+import { FormEvent, useState } from 'react'
 
 //importei a imagem que foi colocada dentro do vscode atraves desse codigo para que ela pudesse ser usada no src da tag img , e o nome q esta entre chaves é o nome que eu dei ao import.
 export function Home() {
   const navigate = useNavigate();
   const { user, singInWithGoogle } = useAuth()
   //navigate eu usei para "cadastrar" uma navegação , ou seja para quando clicar em algo ir para outra pag
+  const [roomCode, setRoomCode] = useState('');
 
 
 
@@ -31,6 +33,33 @@ export function Home() {
     //aqui eu dei o diretorio do navigate
 
   }
+
+
+
+
+  async function handleJoinRoom(event: FormEvent) {
+    event.preventDefault();
+
+    if (roomCode.trim() === '') {
+      return;
+    }
+
+    const roomRef = await database.ref(`rooms/${roomCode}`).get();
+    //ele entra dentro de database rooms e procura a referencia que foi dada pelo usuario
+
+    if (!roomRef.exists()) {
+      alert('Room does not exist.')
+      return;
+      //aqui ele confere se o codigo que foi dado pelo usuario existe, se não existir ele da um alerta
+    }
+
+    navigate(`/rooms/${roomCode}`);
+
+
+  }
+
+
+
   return (
     <div id="page-auth">
       <aside>
@@ -47,10 +76,12 @@ export function Home() {
             Crie sua sala com o Google
           </button>
           <div className='separator'>Ou entre em uma sala</div>
-          <form>
+          <form onSubmit={handleJoinRoom}>
             <input
               type="text"
               placeholder='Digite o código da sala'
+              onChange={event => setRoomCode(event.target.value)}
+              value={roomCode}
             />
             <Button type='submit'>
               Entrar na sala
