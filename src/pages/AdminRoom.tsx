@@ -23,7 +23,7 @@ type RoomParams = {
 }
 //Na linha do RoomCOde code ={params.id? params.id: ""} fiz isso pois o params vem com variavel indefinida , e como não é possivel declarar isso nesse type eu coloquei uma condição caso ela for indefinida nesse código
 
-export function Room() {
+export function AdminRoom() {
     const { user } = useAuth();
     const params = useParams<RoomParams>();
     const [newQuestion, setNewQuestion] = useState('');
@@ -62,7 +62,11 @@ export function Room() {
             <header>
                 <div className="content">
                     <img className='logoImgElement' src={logoImg} alt="" />
-                    <RoomCode code={params.id ? params.id : ""} />
+                    <div className='finish-code-room'>
+                        <RoomCode code={params.id ? params.id : ""} />
+                        <Button isOutlined>Encerrar Sala</Button>
+                    </div>
+
 
                 </div>
 
@@ -76,26 +80,7 @@ export function Room() {
                     {questions.length > 0 && <span>{questions.length} Pergunta(s)</span>}
                 </div>
 
-                <form onSubmit={handleSendQuestion}>
-                    <textarea
-                        placeholder="O que você quer perguntar?"
-                        onChange={event => setNewQuestion(event.target.value)}
-                        value={newQuestion}
-                    />
-                    <div className='form-footer'>
-                        {user ? (
-                            <div className='user-info'>
-                                {questions.length !== 0 ? ('')
-                                    : (<><img src={user.avatar} alt={user.name} /><span className='name-auth'>{user.name}</span></>)
-                                }
 
-                            </div>
-
-                        ) : (<span>Para enviar uma pergunta, <button>faça seu login</button>.</span>)}
-
-                        <Button type='submit' disabled={!user} >Enviar Pergunta</Button>
-                    </div>
-                </form>
 
                 <div className='question-list'>
                     {questions.map(question => {
