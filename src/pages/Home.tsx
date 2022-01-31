@@ -53,6 +53,11 @@ export function Home() {
       //aqui ele confere se o codigo que foi dado pelo usuario existe, se não existir ele da um alerta
     }
 
+    if (roomRef.val().endedAt) {
+      alert('Sala foi encerrada, fale com o adiministrador caso queira entrar!');
+      return;
+    }
+
     navigate(`/rooms/${roomCode}`);
 
 

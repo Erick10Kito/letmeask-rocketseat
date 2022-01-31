@@ -1,7 +1,7 @@
 
 import { type } from 'os';
 import { FormEvent, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import logoImg from '../assets/images/logo.svg'
 import { Button } from '../components/Button'
 import { RoomCode } from '../components/RoomCode';
@@ -11,6 +11,7 @@ import '../styles/Room.scss';
 import { Question } from '../components/Question';
 import '../styles/question.scss';
 import { useRoom } from '../hooks/useRoom';
+import deleteImg from '../assets/images/delete.svg';
 
 
 
@@ -24,11 +25,30 @@ type RoomParams = {
 //Na linha do RoomCOde code ={params.id? params.id: ""} fiz isso pois o params vem com variavel indefinida , e como não é possivel declarar isso nesse type eu coloquei uma condição caso ela for indefinida nesse código
 
 export function AdminRoom() {
+    const navigate = useNavigate();
     const { user } = useAuth();
     const params = useParams<RoomParams>();
     const [newQuestion, setNewQuestion] = useState('');
     const roomId = params.id;
     const { title, questions } = useRoom(roomId ? roomId : '');
+
+    async function handleEndRoom() {
+        if (window.confirm('Você deseja encerrar a sala?')) {
+            await database.ref(`rooms/${roomId}`).update({
+                endedAt: new Date(),
+            })
+
+            navigate('/');
+
+        }
+    }
+
+    async function handleDeleteQuestion(questionId: string) {
+        if (window.confirm('Você tem certeza que deseja excluir essa pergunta?')) {
+            await database.ref(`rooms/${roomId}/questions/${questionId}`).remove();
+
+        }
+    }
 
 
 
@@ -64,7 +84,7 @@ export function AdminRoom() {
                     <img className='logoImgElement' src={logoImg} alt="" />
                     <div className='finish-code-room'>
                         <RoomCode code={params.id ? params.id : ""} />
-                        <Button isOutlined>Encerrar Sala</Button>
+                        <Button isOutlined onClick={handleEndRoom} >Encerrar Sala</Button>
                     </div>
 
 
@@ -91,7 +111,14 @@ export function AdminRoom() {
                                  e retornar 99 pois excluiu, ele somente vai excluir a pergunta de id correspondido a ela, se a pergunta tem id 10, somente vai excluir a de id 10*/
                                 content={question.content}
                                 author={question.author}
-                            />
+                            >
+                                <button
+                                    type='button'
+                                    onClick={() => handleDeleteQuestion(question.id)}
+                                >
+                                    <img src={deleteImg} alt="Remover Pergunta" />
+                                </button>
+                            </Question>
                         );
                     })}
 

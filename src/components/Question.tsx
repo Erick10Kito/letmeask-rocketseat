@@ -1,9 +1,13 @@
+import { ReactNode } from 'react';
+
 type QuestionProps = {
     content: string;
     author: {
         name: string;
         avatar: string;
     }
+
+    children?: ReactNode;
 
 }
 
@@ -17,7 +21,7 @@ export function Question(props: QuestionProps) {
                     <span className="name-auth">{props.author.name}</span>
                 </div>
                 <div>
-
+                    {props.children}
                 </div>
             </footer>
         </div>
