@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 
 type QuestionProps = {
     content: string;
@@ -8,12 +8,17 @@ type QuestionProps = {
     }
 
     children?: ReactNode;
+    isAnswered?: boolean;
+    isHighLighted?: boolean;
 
 }
 
 export function Question(props: QuestionProps) {
+
+    let isAnswered = props.isAnswered;
+    let isHighLighted = props.isHighLighted;
     return (
-        <div className="question">
+        <div className={`question ${isAnswered ? 'answered' : ''} ${isHighLighted && !isAnswered ? 'highlighted' : ''}`} >
             <p>{props.content}</p>
             <footer>
                 <div className="user-info">
