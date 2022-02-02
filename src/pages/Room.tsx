@@ -1,7 +1,7 @@
 
 import { type } from 'os';
 import { FormEvent, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import logoImg from '../assets/images/logo.svg'
 import { Button } from '../components/Button'
 import { RoomCode } from '../components/RoomCode';
@@ -18,12 +18,14 @@ import { useRoom } from '../hooks/useRoom';
 
 
 
+
 type RoomParams = {
     id: string;
 }
 //Na linha do RoomCOde code ={params.id? params.id: ""} fiz isso pois o params vem com variavel indefinida , e como não é possivel declarar isso nesse type eu coloquei uma condição caso ela for indefinida nesse código
 
 export function Room() {
+    const navigate = useNavigate();
     const { user } = useAuth();
     const params = useParams<RoomParams>();
     const [newQuestion, setNewQuestion] = useState('');
@@ -31,7 +33,13 @@ export function Room() {
     const { title, questions } = useRoom(roomId ? roomId : '');
 
 
+    function handleJoinAdminRoom() {
 
+
+
+
+        navigate(`/admin/rooms/${roomId}`);
+    }
 
     async function handleSendQuestion(event: FormEvent) {
         event.preventDefault();
@@ -74,7 +82,10 @@ export function Room() {
             <header>
                 <div className="content">
                     <img className='logoImgElement' src={logoImg} alt="" />
-                    <RoomCode code={params.id ? params.id : ""} />
+                    <div className='AdminAndRoomCode'>
+                        <RoomCode code={params.id ? params.id : ""} />
+                        <Button onClick={handleJoinAdminRoom}>Sala Admin</Button>
+                    </div>
 
                 </div>
 

@@ -99,6 +99,7 @@ export function AdminRoom() {
                     <div className='finish-code-room'>
                         <RoomCode code={params.id ? params.id : ""} />
                         <Button isOutlined onClick={handleEndRoom} >Encerrar Sala</Button>
+                        <Button>Voltar</Button>
                     </div>
 
 

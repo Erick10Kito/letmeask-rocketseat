@@ -13,6 +13,18 @@
 
 
 
+            .AdminAndRoomCode {
+                display: flex;
+                gap: 8px;
+
+
+                Button {
+                    height: 40px;
+                }
+            }
+
+
+
             .logoImgElement {
                 max-height: 45px;
             }
